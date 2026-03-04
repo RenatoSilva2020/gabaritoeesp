@@ -78,7 +78,7 @@
     <div id="login-section">
       <div class="form-group">
         <label for="masp">Digite seu MASP:</label>
-        <input type="text" id="masp" autocomplete="off" placeholder="Ex: 12345678">
+        <input type="text" id="masp" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="Ex: 12345678">
       </div>
       <button class="btn-main" onclick="fazerLogin()">Entrar no Sistema</button>
       <div id="login-msg" class="msg"></div>
@@ -118,7 +118,8 @@
         <div id="save-msg" class="msg"></div>
       </div>
     </div>
-    <script>
+  </div>
+  <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbwQ9lhzFT7w5SrZZWVTy4RTlkUxGCHiALLWFKDvSuCy1HqL3NpOrGvMDTvcwNSKMbZS/exec"; 
     
     let questoesAtuais = [];
@@ -457,4 +458,3 @@
   </script>
 </body>
 </html>
-  </div>
