@@ -61,11 +61,11 @@
     
     .msg { text-align: center; font-weight: 600; margin-top: 15px; font-size: 14px; }
 
-    /* ESTILOS DO NOVO MODAL (POPUP) */
+    /* ESTILOS DO MODAL (POPUP) */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
     .modal-content { background: white; padding: 25px 20px; border-radius: 16px; width: 85%; max-width: 320px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: fadeIn 0.2s ease-out; }
     .modal-content h4 { margin: 0 0 10px 0; font-size: 18px; color: #1f2937; font-weight: 700; }
-    .modal-content p { margin: 0 0 20px 0; font-size: 14px; color: #6b7280; line-height: 1.5; white-space: pre-line; } /* pre-line permite que as quebras de linha \n funcionem */
+    .modal-content p { margin: 0 0 20px 0; font-size: 14px; color: #6b7280; line-height: 1.5; white-space: pre-line; } 
     .modal-buttons { display: flex; gap: 10px; justify-content: space-between; }
     .modal-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: opacity 0.2s; }
     .modal-btn:active { opacity: 0.8; }
@@ -148,7 +148,6 @@
     let disciplinaAtual = "";
     let statusAtual = ""; 
 
-    // --- FUNÇÃO DO NOVO MODAL ---
     function customConfirm(title, message, confirmText = "Confirmar", cancelText = "Cancelar", isAlert = false, confirmColorClass = "") {
       return new Promise((resolve) => {
         const overlay = document.getElementById('custom-modal');
@@ -271,14 +270,20 @@
       }
     }
 
+    // --- NOVA LÓGICA DE CLASSIFICAÇÃO DE TURMAS ---
     function classificarTurma(nome) {
       var n = nome.toUpperCase();
-      if (n.includes("ANO")) return "FUNDAMENTAL";
-      if (n.includes("REG - DIURNO") || n.includes("TEC - DIURNO")) return "REGULAR DIURNO";
-      if (n.includes("REG - NOTURNO (SEDE)")) return "REGULAR NOTURNO (SEDE)";
-      if (n.includes("REG - NOTURNO (MORADA)")) return "REGULAR NOTURNO (MORADA)";
-      if (n.includes("EJA - NOTURNO (SEDE)")) return "EJA NOTURNO (SEDE)";
-      if (n.includes("EJA - NOTURNO (MORADA)")) return "EJA NOTURNO (MORADA)";
+      
+      // Regras para NOITE (Dividido entre SEDE e MORADA)
+      if (n.includes("SEDE") && (n.includes("NOITE") || n.includes("NOTURNO"))) return "NOITE (SEDE)";
+      if (n.includes("MORADA") && (n.includes("NOITE") || n.includes("NOTURNO"))) return "NOITE (MORADA)";
+      if (n.includes("NOITE") || n.includes("NOTURNO")) return "NOITE (OUTRAS)"; // Caso tenha alguma noite sem unidade
+
+      // Regras para MANHÃ e TARDE
+      if (n.includes("MANHÃ") || n.includes("MANHA") || n.includes("DIURNO") || n.includes("MATUTINO")) return "MANHÃ";
+      if (n.includes("TARDE") || n.includes("VESPERTINO")) return "TARDE";
+
+      // Qualquer aba que não se encaixe nas regras acima cai aqui
       return "OUTRAS TURMAS";
     }
 
@@ -294,7 +299,8 @@
         grupos[grupo].push(t);
       });
 
-      var ordemGrupos = ["FUNDAMENTAL", "REGULAR DIURNO", "REGULAR NOTURNO (SEDE)", "REGULAR NOTURNO (MORADA)", "EJA NOTURNO (SEDE)", "EJA NOTURNO (MORADA)", "OUTRAS TURMAS"];
+      // ORDEM EM QUE OS TÍTULOS VÃO APARECER NA TELA
+      var ordemGrupos = ["MANHÃ", "TARDE", "NOITE (SEDE)", "NOITE (MORADA)", "NOITE (OUTRAS)", "OUTRAS TURMAS"];
 
       ordemGrupos.forEach(nomeGrupo => {
         if(grupos[nomeGrupo] && grupos[nomeGrupo].length > 0) {
