@@ -270,14 +270,12 @@
       }
     }
 
-    // --- NOVA LÓGICA DE CLASSIFICAÇÃO DE TURMAS ---
+   // --- NOVA LÓGICA DE CLASSIFICAÇÃO DE TURMAS ---
     function classificarTurma(nome) {
       var n = nome.toUpperCase();
       
-      // Regras para NOITE (Dividido entre SEDE e MORADA)
-      if (n.includes("SEDE") && (n.includes("NOITE") || n.includes("NOTURNO"))) return "NOITE (SEDE)";
-      if (n.includes("MORADA") && (n.includes("NOITE") || n.includes("NOTURNO"))) return "NOITE (MORADA)";
-      if (n.includes("NOITE") || n.includes("NOTURNO")) return "NOITE"; // Caso tenha alguma noite sem unidade
+      // Regra unificada para NOITE
+      if (n.includes("NOITE") || n.includes("NOTURNO")) return "NOITE";
 
       // Regras para MANHÃ e TARDE
       if (n.includes("MANHÃ") || n.includes("MANHA") || n.includes("DIURNO") || n.includes("MATUTINO")) return "MANHÃ";
