@@ -277,7 +277,7 @@
       // Regras para NOITE (Dividido entre SEDE e MORADA)
       if (n.includes("SEDE") && (n.includes("NOITE") || n.includes("NOTURNO"))) return "NOITE (SEDE)";
       if (n.includes("MORADA") && (n.includes("NOITE") || n.includes("NOTURNO"))) return "NOITE (MORADA)";
-      if (n.includes("NOITE") || n.includes("NOTURNO")) return "NOITE (OUTRAS)"; // Caso tenha alguma noite sem unidade
+      if (n.includes("NOITE") || n.includes("NOTURNO")) return "NOITE"; // Caso tenha alguma noite sem unidade
 
       // Regras para MANHÃ e TARDE
       if (n.includes("MANHÃ") || n.includes("MANHA") || n.includes("DIURNO") || n.includes("MATUTINO")) return "MANHÃ";
